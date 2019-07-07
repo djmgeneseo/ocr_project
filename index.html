@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<title>Page Title</title>
+</head>
+
+<body>
+    <style>
+        .center {
+            text-align: center; margin-top: 7%; margin-bottom: 7%;
+        }
+
+        .window {
+            border: black;
+            border-width: 3px;
+            border-style:double;
+            padding: 25px;
+        }
+    </style>
+<div class="container">
+    <div class="row center">
+        <div class="col-12">
+            <h1>👻 Tracking A Dead Man 👻</h1>
+        </div>
+    </div>
+
+    <div class="row center window">
+        <form action="https://api.ocr.space/parse/image" method="post" class="col-12">
+            Enter document (or image) here: <input type="file" name="file"/><br/><br/>
+            
+            <input type="hidden" name="apikey" value="a5d09f663e88957"/>
+            <input type="hidden" name="language" value="eng"/>
+            <input type="hidden" name="isOverlayRequired" value="false"/>
+        </form>
+                <button id="submit" style="margin: auto" onclick="postRequest()">SUBMIT</button>
+    </div>
+
+    <div id="output" class="row center window">
+        Output will appear in here
+    </div>
+</div>
+
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+    function postRequest() {
+        var form = $('form')[0];
+        var formData = new FormData(form);
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://api.ocr.space/parse/image",
+            "method": "POST",
+            "headers": {
+                "Cache-Control": "no-cache"
+            },
+            "processData": false,
+            "contentType": false,
+            "mimeType": "image/jpg",
+            "data": formData
+        }
+
+        $.ajax(settings).done(function (response) {
+            //console.log(response);
+            response = JSON.parse(response);
+            console.log(typeof(response))
+            $('#output').text(response["ParsedResults"][0]["ParsedText"]);
+        });
+    }
+</script>
+</html>
