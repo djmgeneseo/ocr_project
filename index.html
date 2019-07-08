@@ -81,9 +81,10 @@
             if (response["ParsedResults"][0]["ParsedText"]) {
                 printResult(response["ParsedResults"][0]["ParsedText"]);
                 checkMatch(response["ParsedResults"][0]["ParsedText"]);
-            } else {
-                alert('The file you tried is too big...Crop it and try again. Must be < 1000 KB in size.');
             }
+        })
+        .fail(function (response) {
+            alert('The file you tried is too big...Crop it and try again. Must be < 1000 KB in size.');
         });
     }
 
