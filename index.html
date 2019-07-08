@@ -9,7 +9,7 @@
 <body>
     <style>
         .center {
-            text-align: center; margin-top: 7%; margin-bottom: 7%;
+            text-align: center; margin-top: 15px; margin-bottom: 15px;
         }
 
         .window {
@@ -19,11 +19,12 @@
             padding: 25px;
         }
     </style>
-<div class="container">
+<div class="container" style="margin-top: 5%">
     <div class="row center">
         <div class="col-12">
             <h1>👻 Tracking A Dead Mans 👻</h1>
-            <h5>~ a work in progress: file needs to be smaller than 1000 KB to work (for now) ~</h5>
+            <h5>~ A work in progress: file needs to be smaller than 1000 KB to work (for now) ~</h5>
+            <h5>The program is checking for not only 'Isadore Banks,' but the morphemes 'Isad,' and 'dore,' to offset potential OCR mistakes.</h5>
         </div>
     </div>
 
@@ -38,6 +39,8 @@
                 <button id="submit" style="margin: auto" onclick="postRequest()">SUBMIT</button>
     </div>
 
+    <div id="matchSuccess" style="display: none; background-color: green; color: white; text-align: center; padding: 5px;">WE FOUND HIM!</div>
+    <div id="matchFailure" style="display: none; background-color: red; color: white; text-align: center;padding: 5px;">Nope, not in here...</div>
     <div id="output" class="row center window">
         ~~~~~ Output will appear in here ~~~~~
     </div>
@@ -52,6 +55,8 @@
 
 <script>
     function postRequest() {
+        $('#matchSuccess').css('display', 'none');
+        $('#matchFailure').css('display', 'none');
         var form = $('form')[0];
         var formData = new FormData(form);
 
@@ -73,8 +78,23 @@
             //console.log(response);
             response = JSON.parse(response);
             console.log(typeof(response))
-            $('#output').text(response["ParsedResults"][0]["ParsedText"]);
+            if (response["ParsedResults"][0]["ParsedText"]) {
+                printResult(response["ParsedResults"][0]["ParsedText"]);
+                checkMatch(response["ParsedResults"][0]["ParsedText"]);
+            }
         });
+    }
+
+    function printResult(ocrResult) {
+        $('#output').text(ocrResult);
+    }
+
+    function checkMatch(ocrResult) {
+        if (ocrResult.includes('Isadore Banks') || ocrResult.includes('Isad') || ocrResult.includes('dore') ) {
+            $('#matchSuccess').css('display', 'block');
+        } else {
+            $('#matchFailure').css('display', 'block');
+        }
     }
 </script>
 </html>
